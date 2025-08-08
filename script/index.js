@@ -69,7 +69,7 @@ const displayCategories =(categories)=>{
 }
 
 const displayVideos =(videos)=>{
-    const videoContainer =document.getElementById('video-container');
+    const videoContainer = document.getElementById('video-container');
 
     videoContainer.innerHTML ="";
 
