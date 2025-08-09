@@ -34,6 +34,23 @@ const loadVideos = () =>{
     })
 }
 
+
+const loadCategoryVideos = (id)=>{
+ 
+  const url=`https://openapi.programming-hero.com/api/phero-tube/category/${id} `;
+  console.log(url);
+
+  fetch(url)
+  .then((res)=> res.json())
+  .then((data)=>{
+    const clickedButton = document.getElementById(`btn-${id}`);
+    clickedButton.classList.add('active');
+    console.log(clickedButton);
+    displayVideos(data.category)
+  });
+
+};
+
 const displayCategories = (categories) =>{
 console.log(categories);
 const categoryContainer = document.getElementById('category-container')
