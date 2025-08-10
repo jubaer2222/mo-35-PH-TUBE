@@ -44,8 +44,8 @@ const loadCategoryVideos = (id)=>{
   .then((res)=> res.json())
   .then((data)=>{
     const clickedButton = document.getElementById(`btn-${id}`);
-    clickedButton.classList.add('active');
-    console.log(clickedButton);
+    // clickedButton.classList.add('active');
+    // console.log(clickedButton);
     displayVideos(data.category)
   });
 
@@ -58,13 +58,14 @@ const categoryContainer = document.getElementById('category-container')
         
         const categoryDiv = document.createElement('div')
         categoryDiv.innerHTML=`
-        <button  class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+        <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         ` 
         categoryContainer.appendChild(categoryDiv)
     }
 }
 const displayVideos = (videos) =>{
     const videoContainer = document.getElementById('video-container');
+    videoContainer.innerHTML ="";
     for(const video of videos){
         const videoCard = document.createElement('div')
         videoCard.innerHTML = `
@@ -101,4 +102,3 @@ const displayVideos = (videos) =>{
 
 
 loadCategories()
-loadVideos()
