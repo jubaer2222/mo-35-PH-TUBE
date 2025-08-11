@@ -7,6 +7,15 @@ function removeActiveClass() {
   console.log(activeButtons);
 }
 
+const showLoader =() => {
+  document.getElementById('loader').classList.remove('hidden');
+  document.getElementById('video-container').classList.add('hidden');
+}
+const hideLoader =() => {
+  document.getElementById('loader').classList.add('hidden');
+  document.getElementById('video-container').classList.remove('hidden');
+}
+
 
 const loadCategories = () => {
   //1- fetch to data
@@ -37,8 +46,9 @@ const loadCategories = () => {
 //   "description": "Dive into the rhythm of 'Shape of You,' a captivating track that blends pop sensibilities with vibrant beats. Created by Olivia Mitchell, this song has already gained 100K views since its release. With its infectious melody and heartfelt lyrics, 'Shape of You' is perfect for fans looking for an uplifting musical experience. Let the music take over as Olivia's vocal prowess and unique style create a memorable listening journey."
 // }
 
-const loadVideos = () => {
-  fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
+const loadVideos = (searchText = '') => {
+  showLoader()
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then(res => res.json())
     .then(data =>{
       removeActiveClass();
@@ -49,7 +59,7 @@ const loadVideos = () => {
 
 const loadCategoryVideos = (id) => {
 
-
+  showLoader();
 
   const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id} `;
   console.log(url);
@@ -132,7 +142,7 @@ const displayVideos = (videos) => {
           </h2>
         </div>
       `;
-
+    hideLoader();
     return;
   }
 
@@ -159,7 +169,13 @@ const displayVideos = (videos) => {
                 </div>
                 <div class="intro">
                     <h2 class="text-sm font-semibold">${video.title}</h2>
-                    <p class="text-sm text-gray-400 flex gap-1">${video.authors[0].profile_name} <img class="w-5 h-4" src="https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt=""></p>
+                    <p class="text-sm text-gray-400 flex gap-1">
+                    ${video.authors[0].profile_name} 
+                    ${video.authors[0].verified == true 
+                      ?` <img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">` 
+                      : ``} 
+                   
+                    </p>
                     <p class="text-sm text-gray-400">${video.others.views}</p>
                 </div>
               
@@ -167,9 +183,16 @@ const displayVideos = (videos) => {
             <button onClick = loadVideoDetails('${video.video_id}'); class="btn btn-block">Show Details</button>
           </div>
     `
-    videoContainer.append(videoCard)
+    videoContainer.append(videoCard);
+    hideLoader();
   });
 
 };
+
+document.getElementById('search-input')
+  .addEventListener('keyup', (e) => {
+    const input = e.target.value;
+    loadVideos(input);
+  })
 
 loadCategories()
